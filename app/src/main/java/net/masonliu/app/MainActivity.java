@@ -1,11 +1,19 @@
 package net.masonliu.app;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
-import net.masonliu.xrecycleview.R;
+import net.masonliu.xrecycleview.XRecyclerItemClickListener;
+import net.masonliu.xrecycleview.XRecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -14,6 +22,40 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        XRecyclerView recyclerView = (XRecyclerView) findViewById(R.id.recyclerView);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+
+        ListAdapter mAdapter = new ListAdapter(getData(), MainActivity.this);
+        mAdapter.setxRecyclerItemClickListener(new XRecyclerItemClickListener() {
+            @Override
+            public void onWrappedItemClick(View view, int wrappedPosition) {
+
+            }
+        });
+        recyclerView.setAdapter(mAdapter);
+
+        TextView footerView = (TextView) LayoutInflater.from(this).inflate(android.R.layout.simple_list_item_1, null, false);
+        footerView.setText("footer");
+        mAdapter.addFooterView(footerView);
+
+        TextView view = (TextView) LayoutInflater.from(this).inflate(android.R.layout.simple_list_item_1, null, false);
+        view.setText("header");
+        mAdapter.addHeaderView(view);
+
+        TextView endlessView = (TextView) LayoutInflater.from(this).inflate(android.R.layout.simple_list_item_1, null, false);
+        endlessView.setText("endlessView");
+        mAdapter.addEndlessView(recyclerView, endlessView, true);
+    }
+
+    private List<String> getData() {
+        List<String> datas = new ArrayList<String>();
+        for (int i = 0; i < 20; i++) {
+            datas.add("" + i);
+        }
+        return datas;
     }
 
     @Override

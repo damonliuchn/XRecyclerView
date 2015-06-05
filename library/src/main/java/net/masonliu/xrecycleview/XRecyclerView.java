@@ -24,7 +24,7 @@ public class XRecyclerView extends RecyclerView {
     }
 
     public void init(){
-        setOnClickListener(null);
+        setOnScrollListener(null);
     }
 
     private OnScrollListener onLoadMoreScrollListener;

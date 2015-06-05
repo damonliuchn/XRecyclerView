@@ -153,20 +153,24 @@ public abstract class XRecyclerViewAdapter<VH extends XRecyclerViewHolder> exten
 
     protected XRecyclerView recyclerView;
     protected boolean haveLoadMoreView;
+    protected boolean isAutoLoading;
 
-    public void addEndlessView(XRecyclerView recyclerView,View view,boolean isAutoLoadMore){
+    public void addEndlessView(XRecyclerView recyclerView,View view, final boolean isAutoLoadMore){
         this.recyclerView = recyclerView;
         if(isAutoLoadMore){
             recyclerView.setOnLoadMoreScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
-                    int lastVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-                    int totalItemCount = recyclerView.getLayoutManager().getItemCount();
-                    //lastVisibleItem >= totalItemCount - 1 表示剩下1个item自动加载
-                    // dy>0 表示向下滑动
-                    if (lastVisibleItem >= totalItemCount - 1 && dy > 0) {
-                        onLoadMore();
+                    if(!isAutoLoading){
+                        int lastVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
+                        int totalItemCount = recyclerView.getLayoutManager().getItemCount();
+                        //lastVisibleItem >= totalItemCount - 1 表示剩下1个item自动加载
+                        // dy>0 表示向下滑动
+                        if (lastVisibleItem >= totalItemCount - 1 && dy > 0) {
+                            isAutoLoading = true;
+                            onLoadMore();
+                        }
                     }
                 }
             });
@@ -176,6 +180,10 @@ public abstract class XRecyclerViewAdapter<VH extends XRecyclerViewHolder> exten
     }
 
     public abstract void onLoadMore();
+
+    public void autoLoadingFinish(){
+        isAutoLoading = false;
+    }
 
     public void removeEndlessView(){
         if(recyclerView!=null){
