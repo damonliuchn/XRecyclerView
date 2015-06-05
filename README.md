@@ -1,6 +1,6 @@
 # XRecyclerView
 
-A extention for RecyclerView
+A extension for RecyclerView
 
 # Feature
 
