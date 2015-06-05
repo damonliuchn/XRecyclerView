@@ -12,9 +12,21 @@ A extention for RecyclerView
 
 # Usage
 ```java
-        adapter.addFooterView();
-        adapter.addHeaderView();
-        adapter.addEndlessView();
+adapter.addFooterView();
+adapter.addHeaderView();
+adapter.addEndlessView();
+```
+
+```java
+repositories {
+    maven {
+        url "https://jitpack.io"
+    }
+}
+
+dependencies {
+    compile 'com.github.MasonLiuChn:XRecyclerView:1.0.0'
+}
 ```
 
 -----
