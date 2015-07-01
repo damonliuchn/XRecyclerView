@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import net.masonliu.xrecycleview.WrapContentLinearLayoutManager;
 import net.masonliu.xrecycleview.XRecyclerItemClickListener;
 import net.masonliu.xrecycleview.XRecyclerView;
 
@@ -25,7 +26,7 @@ public class MainActivity extends ActionBarActivity {
 
         XRecyclerView recyclerView = (XRecyclerView) findViewById(R.id.recyclerView);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager layoutManager = new WrapContentLinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
         ListAdapter mAdapter = new ListAdapter(getData(), MainActivity.this);
@@ -49,10 +50,10 @@ public class MainActivity extends ActionBarActivity {
         endlessView.setText("endlessView");
         mAdapter.addEndlessView(recyclerView, endlessView, true);
     }
-
+    
     private List<String> getData() {
         List<String> datas = new ArrayList<String>();
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 2; i++) {
             datas.add("" + i);
         }
         return datas;

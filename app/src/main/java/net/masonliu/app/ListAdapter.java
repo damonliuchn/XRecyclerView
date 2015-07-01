@@ -43,7 +43,7 @@ public class ListAdapter extends XRecyclerViewAdapter<ListAdapter.MyViewHolder> 
 
     @Override
     public MyViewHolder onCreateWrappedViewHolderChild(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_list_item, parent, false);
         return new MyViewHolder(view, this);
     }
 
@@ -103,7 +103,7 @@ public class ListAdapter extends XRecyclerViewAdapter<ListAdapter.MyViewHolder> 
 
         public MyViewHolder(View itemView, XRecyclerItemClickListener okRecyclerItemClickListener) {
             super(itemView, okRecyclerItemClickListener);
-            mTextView = (TextView) itemView;
+            mTextView = (TextView) itemView.findViewById(R.id.text1);
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(final View v) {
