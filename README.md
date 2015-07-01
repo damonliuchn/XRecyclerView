@@ -10,6 +10,10 @@ A extension for RecyclerView
 
 3、manual load more items
 
+4、set OnItemClickListener
+
+5、fix RecyclerView wrap_content with LinearLayoutManager
+
 # Usage
 ```java
 adapter.addFooterView();
