@@ -8,8 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import net.masonliu.xrecycleview.XRecyclerItemClickListener;
 import net.masonliu.xrecycleview.XRecyclerViewAdapter;
 import net.masonliu.xrecycleview.XRecyclerViewHolder;
 
@@ -22,9 +22,11 @@ import java.util.List;
 public class ListAdapter extends XRecyclerViewAdapter<ListAdapter.MyViewHolder> {
 
     private List<String> mDataset;
+    private Context context;
 
     public ListAdapter(List<String> dataset, Context context) {
         mDataset = dataset;
+        this.context = context;
     }
 
     public void setmDateSet(List<String> dataset) {
@@ -37,18 +39,17 @@ public class ListAdapter extends XRecyclerViewAdapter<ListAdapter.MyViewHolder> 
     }
 
     @Override
-    public void onWrappedItemClickChild(View view, int wrappedPosition) {
-
+    public void onWrappedItemClick(View view, int wrappedPosition) {
+        Toast.makeText(context, "sss" + wrappedPosition, Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public MyViewHolder onCreateWrappedViewHolderChild(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_list_item, parent, false);
-        return new MyViewHolder(view, this);
+    public MyViewHolder onCreateWrappedViewHolder(ViewGroup parent, int viewType) {
+        return new MyViewHolder(parent, this);
     }
 
     @Override
-    public void onBindWrappedViewHolderChild(MyViewHolder holder, int wrappedPosition) {
+    public void onBindWrappedViewHolder(MyViewHolder holder, int wrappedPosition, int viewType) {
         holder.mTextView.setText(mDataset.get(wrappedPosition));
     }
 
@@ -101,8 +102,9 @@ public class ListAdapter extends XRecyclerViewAdapter<ListAdapter.MyViewHolder> 
 
         public TextView mTextView;
 
-        public MyViewHolder(View itemView, XRecyclerItemClickListener okRecyclerItemClickListener) {
-            super(itemView, okRecyclerItemClickListener);
+        public MyViewHolder(ViewGroup parent, XRecyclerViewAdapter xRecyclerViewAdapter) {
+            super(LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_list_item, parent, false),
+                    xRecyclerViewAdapter);
             mTextView = (TextView) itemView.findViewById(R.id.text1);
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override

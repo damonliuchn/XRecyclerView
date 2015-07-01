@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by liumeng on 4/26/15.
  */
-public abstract class XRecyclerViewAdapter<VH extends XRecyclerViewHolder> extends RecyclerView.Adapter<XRecyclerViewHolder> implements XRecyclerItemClickListener {
+public abstract class XRecyclerViewAdapter<VH extends XRecyclerViewHolder> extends RecyclerView.Adapter<XRecyclerViewHolder> {
 
     private XRecyclerItemClickListener xRecyclerItemClickListener;
 
@@ -23,19 +23,18 @@ public abstract class XRecyclerViewAdapter<VH extends XRecyclerViewHolder> exten
         this.xRecyclerItemClickListener = xRecyclerItemClickListener;
     }
 
-    @Override
-    public void onWrappedItemClick(View view, int position) {
+    public void onWrappedItemClickInXRecyclerViewAdapter(View view, int position) {
         if (xRecyclerItemClickListener != null) {
             xRecyclerItemClickListener.onWrappedItemClick(view, wrapPosition(position));
         }
-        onWrappedItemClickChild(view, wrapPosition(position));
+        onWrappedItemClick(view, wrapPosition(position));
     }
 
-    public abstract void onWrappedItemClickChild(View view, int wrappedPosition);
+    public abstract void onWrappedItemClick(View view, int wrappedPosition);
 
-    public abstract VH onCreateWrappedViewHolderChild(ViewGroup parent, int viewType);
+    public abstract VH onCreateWrappedViewHolder(ViewGroup parent, int viewType);
 
-    public abstract void onBindWrappedViewHolderChild(VH holder, int wrappedPosition);
+    public abstract void onBindWrappedViewHolder(VH holder, int wrappedPosition, int viewType);
 
     /**
      * @return The item count in the underlying adapter
@@ -72,7 +71,7 @@ public abstract class XRecyclerViewAdapter<VH extends XRecyclerViewHolder> exten
         else if (viewType < FOOTERS_START + getFooterCount())
             return new StaticViewHolder(mFooterViews.get(viewType - FOOTERS_START));
         else {
-            return onCreateWrappedViewHolderChild(viewGroup, viewType);
+            return onCreateWrappedViewHolder(viewGroup, viewType);
         }
     }
 
@@ -80,7 +79,7 @@ public abstract class XRecyclerViewAdapter<VH extends XRecyclerViewHolder> exten
     public void onBindViewHolder(XRecyclerViewHolder viewHolder, int position) {
         int hCount = getHeaderCount();
         if (position >= hCount && position < hCount + getWrappedItemCount())
-            onBindWrappedViewHolderChild((VH) viewHolder, wrapPosition(position));
+            onBindWrappedViewHolder((VH) viewHolder, wrapPosition(position), getWrappedItemViewType(wrapPosition(position)));
     }
 
     /**
@@ -100,9 +99,9 @@ public abstract class XRecyclerViewAdapter<VH extends XRecyclerViewHolder> exten
      * @param view The footer view to add
      */
     public void addFooterView(View view) {
-        if(haveLoadMoreView){
-            mFooterViews.add(mFooterViews.size()-1,view);
-        }else{
+        if (haveLoadMoreView) {
+            mFooterViews.add(mFooterViews.size() - 1, view);
+        } else {
             mFooterViews.add(view);
         }
     }
@@ -155,14 +154,14 @@ public abstract class XRecyclerViewAdapter<VH extends XRecyclerViewHolder> exten
     protected boolean haveLoadMoreView;
     protected boolean isAutoLoading;
 
-    public void addEndlessView(XRecyclerView recyclerView,View view, final boolean isAutoLoadMore){
+    public void addEndlessView(XRecyclerView recyclerView, View view, final boolean isAutoLoadMore) {
         this.recyclerView = recyclerView;
-        if(isAutoLoadMore){
+        if (isAutoLoadMore) {
             recyclerView.setOnLoadMoreScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
-                    if(!isAutoLoading){
+                    if (!isAutoLoading) {
                         int lastVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
                         int totalItemCount = recyclerView.getLayoutManager().getItemCount();
                         //lastVisibleItem >= totalItemCount - 1 表示剩下1个item自动加载
@@ -181,22 +180,22 @@ public abstract class XRecyclerViewAdapter<VH extends XRecyclerViewHolder> exten
 
     public abstract void onLoadMore();
 
-    public void autoLoadingFinish(){
+    public void autoLoadingFinish() {
         isAutoLoading = false;
     }
 
-    public void removeEndlessView(){
-        if(recyclerView!=null){
+    public void removeEndlessView() {
+        if (recyclerView != null) {
             recyclerView.setOnLoadMoreScrollListener(null);
         }
-        if(haveLoadMoreView){
-            mFooterViews.remove(mFooterViews.size()-1);
+        if (haveLoadMoreView) {
+            mFooterViews.remove(mFooterViews.size() - 1);
             haveLoadMoreView = false;
         }
     }
 
-    public View getEndlessView(){
-        if(haveLoadMoreView){
+    public View getEndlessView() {
+        if (haveLoadMoreView) {
             return mFooterViews.get(mFooterViews.size() - 1);
         }
         return null;

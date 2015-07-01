@@ -8,12 +8,14 @@ import android.view.View;
  */
 public abstract class XRecyclerViewHolder extends RecyclerView.ViewHolder {
 
-    public XRecyclerViewHolder(View itemView, final XRecyclerItemClickListener xRecyclerItemClickListener) {
+    public XRecyclerViewHolder(View itemView, final XRecyclerViewAdapter xRecyclerViewAdapter) {
         super(itemView);
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                xRecyclerItemClickListener.onWrappedItemClick(v, getPosition());
+                if (xRecyclerViewAdapter != null) {
+                    xRecyclerViewAdapter.onWrappedItemClickInXRecyclerViewAdapter(v, getPosition());
+                }
             }
         });
     }
